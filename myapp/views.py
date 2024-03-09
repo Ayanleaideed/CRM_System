@@ -7,6 +7,7 @@ from .models import Customer, UserInfo
 from . import models
 from django.core.exceptions import ObjectDoesNotExist
 
+
 def login_user(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -91,6 +92,7 @@ def register(request):
 # Main Dashboard/page
 @login_required(login_url='login_user')
 def index(request):
+    vip_data = []
     try:
          # if the current user is admin then display all owners
         if request.user.is_superuser:
@@ -101,7 +103,7 @@ def index(request):
             user_info = UserInfo.objects.get(user=request.user)
             # If successful, get the customers created by the current user
             customers = Customer.objects.filter(created_by=user_info.id)
-            header = ['ID', 'Username', 'Email', 'Age','Actions']
+            header = ['ID', 'Username', 'Email', 'Phone Number','Actions']
             vip_data = []
 
             for customer in customers:
@@ -115,7 +117,8 @@ def index(request):
         # If no UserInfo object is found, return an empty queryset
         customers = Customer.objects.none()
         header = ['ID', 'Username', 'Email', 'Age','Actions']
-    print(vip_data)
+
+
     return render(request, 'index.html', {'data': customers, 'header': header, 'vip_data': vip_data})
 
 @login_required(login_url='login_user')
@@ -155,29 +158,34 @@ def createUser(request):
 
 # we don't want unauthenticated user to be able to delete customer information and also they be even sey
 # information about the customer only if the have created them
-@login_required(login_url=login_user)
+@login_required(login_url='login_user')
 def delete(request, id):
+
     if request.method == 'GET':
         try:
             user_record = Customer.objects.get(id=id)
 
             # Check if the current user is the creator of the record
-            if user_record.created_by == request.user:
+            if user_record.created_by.user == request.user:
                 return render(request, 'confirm_delete.html', {'user_record': user_record})
             else:
                 messages.error(request, "You are not authorized to delete this record.")
                 return redirect('index')
         except Customer.DoesNotExist:
-          messages.warning(request, f'Record with ID {id} does not exist Or You are not authorized to delete this record.')
-          return redirect('index')
+            messages.warning(request, f'Record with ID {id} does not exist Or You are not authorized to delete this record.')
+            return redirect('index')
 
-    # If the request is not a GET request, handle the actual deletion logic
-    try:
-        user_record = Customer.objects.get(id=id)
-        user_record.delete()
-        messages.success(request, f'Record with ID {id} and name of {user_record.name} deleted successfully.')
-    except Customer.DoesNotExist:
-        messages.warning(request, f'Record with ID {id} does not exist.')
+    # If the request is a POST request, handle the actual deletion logic
+    elif request.method == 'POST':
+        try:
+            user_record = Customer.objects.get(id=id)
+            if user_record.created_by.user == request.user:
+                user_record.delete()
+                messages.success(request, f'Record with ID {id} and name of {user_record.name} deleted successfully.')
+            else:
+                messages.error(request, "You are not authorized to delete this record.")
+        except Customer.DoesNotExist:
+            messages.warning(request, f'Record with ID {id} does not exist.')
 
     return redirect('index')
 
