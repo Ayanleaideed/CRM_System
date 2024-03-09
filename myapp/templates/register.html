@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    #adminpassword,
+    #usertype-container {
+        display: none;
+        /* Initially hide the admin password input and user type container */
+    }
+</style>
+
+<div class="container mt-5">
+    <div class="card mx-auto" style="max-width: 400px;">
+        <div class="card-body">
+            <h2 class="card-title text-center mb-4">Register</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="exampleInputEmail1" class="form-label">Username</label>
+                    <input name="username" type="text" class="form-control" id="exampleInputEmail1"
+                        aria-describedby="emailHelp" required>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Password</label>
+                    <input name="password" type="password" class="form-control" id="exampleInputPassword1" required>
+                </div>
+
+                <div class="form-check">
+                    <input type="radio" id="adminMode" name="mode" value="admin" onchange="toggleAdminFields()">
+                    <label class="form-check-label" for="adminMode">
+                        Admin Mode
+                    </label><br>
+                    <input type="password" id="adminpassword" name="adminPassword" placeholder="Admin password">
+                </div>
+
+                <div class="form-check">
+                    <input type="radio" id="regularMode" name="mode" value="regular" checked>
+                    <label class="form-check-label" for="regularMode">
+                        Regular Mode
+                    </label>
+                </div>
+
+                <div class="mb-3" id="usertype-container" style="display: none;"><br>
+                    <label for="Usertype" class="form-label">User Type</label><br>
+                    <select name="userType" class="form-select"
+                        style="padding: 5px; margin: 3px; border: solid 2px ; border-radius: 6px; font-size: large; color: black; background-color: white; border-color: black;">
+                        <option value="" selected disabled>Select User Type</option>
+                        <option value="admin">Admin</option>
+                        <option value="staff">Staff</option>
+                    </select>
+                </div><br>
+
+                <button type="submit" class="btn btn-primary btn-block">Register</button>
+                <a href="{% url 'login_user' %}" class="btn btn-secondary btn-block">Login</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleAdminFields() {
+        var adminModeRadio = document.getElementById("adminMode");
+        var regularModeRadio = document.getElementById("regularMode");
+        var adminpassword = document.getElementById("adminpassword");
+        var usertypeContainer = document.getElementById("usertype-container");
+
+        if (adminModeRadio.checked) {
+            adminpassword.style.display = "block";
+            usertypeContainer.style.display = "block";
+            regularModeRadio.checked = false; // Unselect regular mode if admin mode is selected
+        } else {
+            adminpassword.style.display = "none";
+            usertypeContainer.style.display = "none";
+        }
+
+        if (regularModeRadio.checked) {
+            adminpassword.style.display = "none";
+            usertypeContainer.style.display = "none";
+            adminModeRadio.checked = false; // Unselect admin mode if regular mode is selected
+        }
+    }
+</script>
+
+
+{% endblock %}

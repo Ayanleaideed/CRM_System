@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block content %}
+ 
+<div id="form" class="container mt-5 ">
+  <div class="card mx-auto box-shower" style="max-width: 400px;">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">Login</h2>
+      <form method="post" class="form-group">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label for="exampleInputEmail1" class="form-label">Username</label>
+          <input name="username" type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+        </div>
+        <div class="mb-3">
+          <label for="exampleInputPassword1" class="form-label">Password</label>
+          <input name="password" type="password" class="form-control" id="exampleInputPassword1" required>
+        </div>
+        <button type="submit" class="btn btn-primary btn-block">Login</button>
+        <a href="{% url 'register' %}" class="btn btn-secondary btn-block">Register</a>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

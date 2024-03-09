@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+    integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<title>Create</title>
+<style>
+    body {
+        color: black;
+        /* background-color: #7ab3f4; */
+        /* background-color: #659DBD;
+             */
+        background-color: hsla(0, 15%, 63%, 0.746);
+    }
+
+    form {
+        max-width: 650px;
+        margin: 1rem auto;
+        padding: 20px;
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0px 0px 40px 0px rgba(0, 0, 0, 0.5);
+    }
+
+    button {
+        margin-top: 15px;
+    }
+
+    a {
+        display: block;
+        margin-top: 10px;
+        text-align: center;
+    }
+</style>
+
+<form action="/create/" method="post">
+    {% csrf_token %}
+    <!-- User model inputs -->
+    <p
+        style="font-weight: bolder; text-transform: capitalize; text-align: center; font-family: cursive; font-size: large;">
+        Create Customer</p>
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input name="username" type="text" class="form-control" id="username" placeholder="Username">
+    </div>
+    <div class="form-group">
+        <label for="email">Email address</label>
+        <input name="email" type="email" class="form-control" id="email" placeholder="Enter email">
+    </div>
+    <div class="form-group">
+        <label for="age">Age</label>
+        <input name="age" type="number" class="form-control" id="age" placeholder="Age">
+    </div>
+
+    <!-- UserProfile model inputs -->
+    <div class="form-group">
+        <label for="address">Phone Number</label>
+        <input name="phnumber" type="number" class="form-control" id="Phonenumber" placeholder="Phone Number">
+    </div>
+    <div class="form-group">
+        <label for="address">Address</label>
+        <input name="address" type="text" class="form-control" id="address" placeholder="Address">
+    </div>
+    <div class="form-group">
+        <label for="orders">Orders</label>
+        <input name="orders" type="number" class="form-control" id="orders" placeholder="Orders">
+    </div>
+    <div class="form-group">
+        <label for="vip_status">VIP Status</label>
+        <select name="vip_status" class="form-control" id="vip_status">
+            <option></option>
+            <option value="platinum">Platinum</option>
+            <option value="gold">Gold</option>
+        </select>
+    </div>
+
+    <button name="submit" type="submit" class="btn btn-primary">Submit</button>
+
+    <a href="{% url 'index' %}" class="btn btn-secondary" style="margin-top: 16px; padding: 6px 19px;">Back</a>
+</form>
+{% endblock %}
