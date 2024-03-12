@@ -3,8 +3,6 @@ from django.contrib.auth.models import User
 
 class UserInfo(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, default=1)
-    # age = models.IntegerField()
-
     def __str__(self):
         return self.user.username
 
@@ -21,6 +19,7 @@ class Customer(models.Model):
     ]
     vip_status = models.CharField(max_length=50, choices=VIP_STATES_CHOICES)
     created_by = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+
 
     def __str__(self):
         return self.name

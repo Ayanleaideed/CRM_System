@@ -160,7 +160,6 @@ def createUser(request):
 # information about the customer only if the have created them
 @login_required(login_url='login_user')
 def delete(request, id):
-
     if request.method == 'GET':
         try:
             user_record = Customer.objects.get(id=id)
@@ -175,11 +174,13 @@ def delete(request, id):
             messages.warning(request, f'Record with ID {id} does not exist Or You are not authorized to delete this record.')
             return redirect('index')
 
-    # If the request is a POST request, handle the actual deletion logic
+    # if the request method is post Then delete the record
     elif request.method == 'POST':
+        # If the request is not a GET request, handle the actual deletion logic
         try:
+            # raise NotImplementedError('You can only delete records in GET requests')
             user_record = Customer.objects.get(id=id)
-            if user_record.created_by.user == request.user:
+            if user_record.created_by == request.user:
                 user_record.delete()
                 messages.success(request, f'Record with ID {id} and name of {user_record.name} deleted successfully.')
             else:
@@ -187,7 +188,7 @@ def delete(request, id):
         except Customer.DoesNotExist:
             messages.warning(request, f'Record with ID {id} does not exist.')
 
-    return redirect('index')
+        return redirect('index')
 
 def lock_owner(request, id):
     if request.method == 'GET':
