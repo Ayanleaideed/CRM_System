@@ -3,9 +3,11 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import Customer, UserInfo
+from .models import Customer, UserInfo, logHistory
 from . import models
 from django.core.exceptions import ObjectDoesNotExist
+from .utils import detect_changes
+
 
 
 def login_user(request):
@@ -93,6 +95,9 @@ def register(request):
 @login_required(login_url='login_user')
 def index(request):
     vip_data = []
+    CurUser = UserInfo.objects.get_or_notfound (user=request.user)
+
+    logList = logHistory.objects.filter(user=CurUser)
     try:
          # if the current user is admin then display all owners
         if request.user.is_superuser:
@@ -119,7 +124,7 @@ def index(request):
         header = ['ID', 'Username', 'Email', 'Age','Actions']
 
 
-    return render(request, 'index.html', {'data': customers, 'header': header, 'vip_data': vip_data})
+    return render(request, 'index.html', {'data': customers, 'header': header, 'vip_data': vip_data, 'logList': logList})
 
 @login_required(login_url='login_user')
 def createUser(request):
@@ -233,17 +238,17 @@ def update(request, id):
         try:
             # Try to get the Customer object with the given id
             customer = Customer.objects.get(id=id)
-
+            # old_record = customer
             # Check if the current user is the one who created this customer
             if customer.created_by.user == request.user:
                 # Prepare the data to be displayed
                 customer_data = {
-                    'username': customer.name,
+                    'name': customer.name,
                     'email': customer.email,
                     'age': customer.age,
                     'phone_Number': customer.phone_number,
                     'address': customer.address,
-                    'order': customer.orders,
+                    'orders': customer.orders,
                     'vip_status': customer.vip_status
                 }
 
@@ -262,18 +267,49 @@ def update(request, id):
             customer = Customer.objects.get(id=id)
 
             # Check if all required fields are provided
-            if all(field in request.POST for field in ['username', 'email', 'age', 'address', 'phone_Number', 'order', 'vip_status']):
+            if all(field in request.POST for field in ['name', 'email', 'age', 'address', 'phone_Number', 'orders', 'vip_status']):
                 # Update the customer record
-                customer.name = request.POST.get('username')
+                customer.name = request.POST.get('name')
                 customer.email = request.POST.get('email')
                 customer.age = request.POST.get('age')
                 customer.address = request.POST.get('address')
                 customer.phone_number = request.POST.get('phone_Number')
-                customer.orders = request.POST.get('order')
+                customer.orders = request.POST.get('orders')
                 customer.vip_status = request.POST.get('vip_status')
 
+
+                 # Prepare log details
+                user = UserInfo.objects.get(user=request.user)
+                old_customerRecord = Customer.objects.get(id=id)
+                # Check for change notification
+                record_changes = detect_changes(request, old_customerRecord)
+
+
+
+                # Construct change description
+                if record_changes:
+                    for key, value in record_changes.items():
+                        new_value = getattr(old_customerRecord, key, None)
+                        old_value = value[0]
+
+                        # Check if the value has actually changed
+                        if old_value != new_value:
+                            description = (f"User with ID: {user.id} has updated '{key}' for Customer ID: {old_customerRecord.id}")
+
+                            # Create a log entry
+                            log_entry = logHistory(
+                                user=user,
+                                name=old_customerRecord.name,
+                                description=description,
+                                previous_value=str(old_value),
+                                new_value=str(new_value)
+                            )
+                            log_entry.save()
+
                 # Save the updated customer record
-                customer.save()
+                if record_changes:
+                    customer.save()
+
 
                 messages.success(request, "Customer updated successfully.")
                 return redirect('index')
@@ -330,6 +366,10 @@ def SaveUser(username, email, age):
 def loading(request):
     return render(request, 'loading.html')
 
+
+def logList(request, id):
+    log_record = logHistory.objects.filter(id=id)
+    return render(request, 'logList.html', {'logList': log_record})
 
 if __name__=="__main__":
     debug=True

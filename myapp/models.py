@@ -23,3 +23,12 @@ class Customer(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class logHistory(models.Model):
+    user = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255, blank=True, null=True)
+    description = models.CharField(max_length=255, blank=False, null=False)
+    previous_value = models.CharField(max_length=255, blank=False, null=False)
+    new_value = models.CharField(max_length=255, blank=False, null=False)
+    created_time = models.DateTimeField(auto_now_add=True)

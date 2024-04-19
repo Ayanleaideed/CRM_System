@@ -16,5 +16,6 @@ urlpatterns = [
     path('delete/<int:id>/', views.delete, name='delete'),
     path('create/', views.createUser, name='create'),
     path('index', views.index, name='index'),
+    path('logList/<int:id>', views.logList, name='logList'),
 
 ]

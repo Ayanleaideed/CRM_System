@@ -73,9 +73,29 @@
             </tbody>
         </table>
     </div>
+
+    <!-- Log table here -->
+    <div class="list-group">
+        {% for log in logList %}
+
+        <ul class="list-group">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+                style="color: hsla(0, 5%, 9%, 0.794); font-size: large;">
+                {{log.user}}
+                <span class="badge badge-primary badge-pill">{{log.created_time}} </span>
+                <!-- <span class="badge badge-primary badge-pill">{{log.description}} </span>
+                <span class="badge badge-primary badge-pill">{{log.previous_value}} </span> -->
+                <a href="/logList/{{ log.id }}" class="btn btn-info">log</a>
+            </li>
+            {% endfor %}
+    </div>
+
+
+
+
     {% if request.user.is_superuser %}
 
-    <pre>{{vip_data}}</pre>
+
     <div class="row justify-content-center">
         <div class="col-lg-6">
             <canvas id="vipChart"></canvas>

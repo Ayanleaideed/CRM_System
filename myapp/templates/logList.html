@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+  /* Set the outer container to be fully flexible */
+  .flexible-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    /* Full height of the viewport */
+  }
+
+  .flex-grow {
+    flex: 1;
+    /* Allows the card to expand to fill available space */
+  }
+
+  /* Ensures the table stretches to available space */
+  .full-width {
+    width: 100%;
+    max-width: none;
+    /* No maximum width to restrict it */
+  }
+
+  /* Specific styles to handle table responsiveness and overflows */
+  .table-responsive {
+    overflow-x: visible;
+    /* Adjust as per requirement to manage horizontal overflow */
+  }
+
+  /* Ensure that table cells wrap text and do not overflow */
+  .table-cell-wrap {
+    white-space: normal;
+    word-break: break-word;
+  }
+
+  .log-h1 {
+    align-items: center;
+  }
+</style>
+
+<div class="container mt-5 flexible-container log-h1">
+  <div class="card shadow-lg flex-grow">
+    <div class="card-header bg-primary text-white  ">
+      <h2 class="card-title text-center ">Log History</h2>
+    </div>
+    <div class="card-body">
+      <div class="table-responsive full-width">
+        <table class="table table-hover full-width">
+          <thead class="thead-dark">
+            <tr>
+              <th scope="col">User</th>
+              <th scope="col">Name</th>
+              <th scope="col" class="table-cell-wrap">Description</th>
+              <th scope="col">Previous Value</th>
+              <th scope="col">New Value</th>
+              <th scope="col">Created Date</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for log in logList %}
+            <tr>
+              <td><span class="badge badge-pill BadgeColor">{{ log.user }}</span></td>
+              <td><span class="badge badge-pill BadgeColor">{{ log.name }}</span></td>
+              <td><span class="badge badge-pill BadgeColor">{{ log.description }}</span></td>
+              <td><span class="badge badge-pill BadgeColor">{{ log.previous_value }}</span></td>
+              <td><span class="badge badge-pill BadgeColor">{{ log.new_value }}</span></td>
+              <td><span class="badge badge-pill BadgeColor">{{ log.created_time|date:"Y-m-d H:i" }}</span></td>
+            </tr>
+            {% empty %}
+            <tr>
+              <td colspan="6" class="text-center"><em>No logs available.</em></td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      <a href="{% url 'index' %}" class="btn btn-secondary mb-4" style="padding: 8px 2rem;">Back</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

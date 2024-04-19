@@ -91,7 +91,7 @@ DATABASES = {
         'PORT': '5432',
     }
 }
-
+SESSION_COOKIE_AGE = 1800
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
