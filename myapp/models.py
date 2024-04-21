@@ -32,3 +32,12 @@ class logHistory(models.Model):
     previous_value = models.CharField(max_length=255, blank=False, null=False)
     new_value = models.CharField(max_length=255, blank=False, null=False)
     created_time = models.DateTimeField(auto_now_add=True)
+
+
+# store authentication information in hashed_password and hashed_username fields
+class authenticationInfo(models.Model):
+    username = models.CharField(max_length=255, blank=False, null=False)
+    adminPassword = models.CharField(max_length=255, blank=False, null=False)
+
+    def __str__(self):
+        return self.username

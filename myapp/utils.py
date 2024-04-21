@@ -1,4 +1,4 @@
-from .models import Customer, UserInfo, logHistory
+from .models import Customer, UserInfo, logHistory, authenticationInfo
 
 
 def detect_changes(request, model_instance):
@@ -38,3 +38,19 @@ def detect_changes(request, model_instance):
     if changes:
         # model_instance.save()
         return changes
+
+
+
+#Function to create inital admin password to create new admin and staff members
+import hashlib
+
+def store_password_in_database(username, password):
+    # Hash the password
+    hashed_password = hashlib.sha256(password.encode()).hexdigest()
+
+    # Save the hashed password in the database
+    authenticationInfo.objects.create(username=username, adminPassword=hashed_password)
+
+# username = request.user.name
+# password = ""
+# store_password_in_database(username, password)

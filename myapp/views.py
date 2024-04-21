@@ -3,7 +3,7 @@ from django.contrib import messages
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
-from .models import Customer, UserInfo, logHistory
+from .models import Customer, UserInfo, logHistory, authenticationInfo
 from . import models
 from django.core.exceptions import ObjectDoesNotExist
 from .utils import detect_changes
@@ -55,10 +55,16 @@ def register(request):
         mode = request.POST.get('mode')
         user_type = request.POST.get('userType')
         admin_password = request.POST.get('adminPassword')
+        admin_name = request.POST.get('adminName')
 
         if mode == 'admin':
-            if admin_password == 'isadmin':
-                user = User.objects.create_user(username=username, password=password)
+            print(adminAuth(admin_name, admin_password))
+            if adminAuth(admin_name, admin_password):
+                try:
+                    user = User.objects.create_user(username=username, password=password)
+                except:
+                    messages.warning(request, 'This Username has already been taken.')
+                    return redirect(register)
                 if user_type == 'admin':
                     user.is_staff = True
                     user.is_superuser = True
@@ -78,7 +84,11 @@ def register(request):
                 messages.error(request, 'Incorrect admin password. Please provide the correct password.')
                 return redirect('register')
         else:  # Regular user mode
-            user = User.objects.create_user(username=username, password=password)
+            try:
+             user = User.objects.create_user(username=username, password=password)
+            except:
+                messages.warning(request, 'This Username has already been taken.')
+                return redirect('register')
             user.is_staff = False
             user.is_superuser = False
             user.save()
@@ -95,9 +105,8 @@ def register(request):
 @login_required(login_url='login_user')
 def index(request):
     vip_data = []
-    CurUser = UserInfo.objects.get_or_notfound (user=request.user)
-
-    logList = logHistory.objects.filter(user=CurUser)
+    logList = []
+    # CurUser = UserInfo.objects(user=request.user)
     try:
          # if the current user is admin then display all owners
         if request.user.is_superuser:
@@ -108,6 +117,7 @@ def index(request):
             user_info = UserInfo.objects.get(user=request.user)
             # If successful, get the customers created by the current user
             customers = Customer.objects.filter(created_by=user_info.id)
+            logList = logHistory.objects.filter(user=user_info)
             header = ['ID', 'Username', 'Email', 'Phone Number','Actions']
             vip_data = []
 
@@ -370,6 +380,45 @@ def loading(request):
 def logList(request, id):
     log_record = logHistory.objects.filter(id=id)
     return render(request, 'logList.html', {'logList': log_record})
+
+# check for admin permissions for create admin and stuff members
+import hashlib
+
+def adminAuth(username, password):
+    try:
+        #User model and AuthenticationInfo model y
+        user = User.objects.get(username=username)
+        # print(user.username, user.is_superuser)
+
+        if user.is_superuser:
+            try:
+                auth_info = authenticationInfo.objects.get(username=username)
+                # print(f'Stored hashed password: {auth_info.adminPassword}')
+
+                hashed_password = hashlib.sha1(password.encode()).hexdigest()
+                # print(f'Computed hashed password: {hashed_password}')
+
+                if hashed_password == auth_info.adminPassword.strip():
+                    return True
+                else:
+                    return False
+            except authenticationInfo.DoesNotExist:
+                return False
+        else:
+            return False
+    except User.DoesNotExist:
+        return False
+
+
+
+
+
+
+
+
+
+
+
 
 if __name__=="__main__":
     debug=True
