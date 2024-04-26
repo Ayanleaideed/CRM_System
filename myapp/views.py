@@ -253,6 +253,7 @@ def update(request, id):
             if customer.created_by.user == request.user:
                 # Prepare the data to be displayed
                 customer_data = {
+                    'profileImage': customer.profile_image,
                     'name': customer.name,
                     'email': customer.email,
                     'age': customer.age,
@@ -286,6 +287,7 @@ def update(request, id):
                 customer.phone_number = request.POST.get('phone_Number')
                 customer.orders = request.POST.get('orders')
                 customer.vip_status = request.POST.get('vip_status')
+                customer.profile_image = request.POST.get('profile_image')
 
 
                  # Prepare log details
@@ -343,6 +345,7 @@ def view_record(request, id):
             if customer.created_by.user == request.user:
                 # Prepare the data to be displayed
                 customer_data = {
+                    'profileImage': customer.profile_image,
                     'ID': customer.id,
                     'Name': customer.name,
                     'Email': customer.email,
@@ -370,7 +373,6 @@ def SaveUser(username, email, age):
         obj = models.UserInfo(username=username, email=email, age=age)
         obj.save()
         return True
-
     return False
 
 def loading(request):
@@ -408,14 +410,6 @@ def adminAuth(username, password):
             return False
     except User.DoesNotExist:
         return False
-
-
-
-
-
-
-
-
 
 
 

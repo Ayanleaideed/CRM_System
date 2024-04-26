@@ -73,12 +73,21 @@
                         </div>
                         </div>
                     {% else %}
+                      {% if key == 'profileImage' %}
+                                <span class="input-group-text" id="inputGroup-sizing-sm">
+                                    <strong>
+                                        <img style="border-radius: 50%; border: 2px solid hsla(60, 11%, 11%, 0.522); width: 70px; height: 80px; object-fit: cover;"
+                                            src="{{ value.url }}" class="img-fluid img-thumbnail" alt="{{ value }}">
+                                    </strong>
+                                </span>
+                        {% endif %}
+
                         <div class="input-group input-group-sm">
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="inputGroup-sizing-sm"><strong>{{key}}</strong></span>
-                            </div>
                             <input name="{{key}}" type="text" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" value="{{value}}">
                         </div>
+                         </div>
                     {% endif %}
                 {% endfor %}
             </ul>

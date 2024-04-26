@@ -19,6 +19,7 @@ class Customer(models.Model):
     ]
     vip_status = models.CharField(max_length=50, choices=VIP_STATES_CHOICES)
     created_by = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
+    profile_image = models.ImageField(upload_to='profile_images/')
 
 
     def __str__(self):
