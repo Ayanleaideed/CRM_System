@@ -58,8 +58,8 @@ def register(request):
         admin_name = request.POST.get('adminName')
 
         if mode == 'admin':
-            print(adminAuth(admin_name, admin_password))
-            if adminAuth(admin_name, admin_password):
+            # print(adminAuth(request, admin_name, admin_password))
+            if adminAuth(request, admin_name, admin_password):
                 try:
                     user = User.objects.create_user(username=username, password=password)
                 except:
@@ -386,30 +386,40 @@ def logList(request, id):
 # check for admin permissions for create admin and stuff members
 import hashlib
 
-def adminAuth(username, password):
-    try:
-        #User model and AuthenticationInfo model y
-        user = User.objects.get(username=username)
-        # print(user.username, user.is_superuser)
+def adminAuth(request, username, password):
+    # NOTE
+        # for temporary we will just hard-code the username and password for admin
+    # try:
+    #     #User model and AuthenticationInfo model y
+    #     user = User.objects.get(username=username)
+    #     # print(user.username, user.is_superuser)
 
-        if user.is_superuser:
-            try:
-                auth_info = authenticationInfo.objects.get(username=username)
-                # print(f'Stored hashed password: {auth_info.adminPassword}')
+    #     if user.is_superuser:
+    #         try:
+    #             auth_info = authenticationInfo.objects.get(username=username)
+    #             # print(f'Stored hashed password: {auth_info.adminPassword}')
 
-                hashed_password = hashlib.sha1(password.encode()).hexdigest()
-                # print(f'Computed hashed password: {hashed_password}')
+    #             hashed_password = hashlib.sha1(password.encode()).hexdigest()
+    #             # print(f'Computed hashed password: {hashed_password}')
 
-                if hashed_password == auth_info.adminPassword.strip():
-                    return True
-                else:
-                    return False
-            except authenticationInfo.DoesNotExist:
-                return False
+    #             if hashed_password == auth_info.adminPassword.strip():
+    #                 return True
+    #             else:
+    #                 return False
+    #         except authenticationInfo.DoesNotExist:
+    #             return False
+    #     else:
+    #         return False
+    # except User.DoesNotExist:
+    #     return False
+    if username  == 'admin' and password == 'isadmin':
+        return True
+    else:
+        if username != 'admin':
+            messages.error(request, 'incorrect admin Username...')
         else:
-            return False
-    except User.DoesNotExist:
-        return False
+            messages.warning(request, 'incorrect Admin Password')
+    return False
 
 
 

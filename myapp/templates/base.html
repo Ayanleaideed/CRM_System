@@ -13,68 +13,66 @@
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-JtF9an6/b7VX7oHRfP1UiFhF6pX8pLpM/Ib3L9A2Y21mOhU7R5V/q1iTG0L3Z5gi"
     crossorigin="anonymous"></script>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.7.2/font/bootstrap-icons.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
     integrity="sha384-ez6Tl3Je9z58vZbIITv5Ob0GsYsLdXBSuKScxD7GqRHD6Upgb4Pv5PBjTrxNSvHb" crossorigin="anonymous">
 
   <link rel="stylesheet" href="{% static 'css/style.css' %}">
   <link rel="stylesheet" href="{% static 'css/login.css' %}">
+  <style>
+    .navbar-custom {
+      background-color: #0056b3;
+      /* Dark blue background */
+      border-bottom: 3px solid #ffc107;
+      /* Yellow accent border */
+    }
+
+    .navbar-custom .navbar-brand,
+    .navbar-custom .nav-link {
+      color: #fff;
+      /* White text */
+    }
+
+    .navbar-custom .nav-link:hover {
+      border-bottom: 2px solid #fff;
+      /* White underline on hover */
+    }
+  </style>
 </head>
 
 <body>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+  <nav class="navbar navbar-expand-lg navbar-custom">
     <a class="navbar-brand" href="{% url 'loading' %}">
-      <h4 style="font-family: sans-serif monospace; font-weight: bold;">Customer Relationship Management</h4>
+      <h4 style="font-family: sans-serif monospace; font-weight: bold; margin-right: 30px ;">Customer
+        Relationship Management</h4>
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
 
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav mr-auto">
-        <li class="nav-item">
-          <h6><strong><a class="nav-link" href="{% url 'create' %}"
-                style="color: white; padding: 10px; border-bottom: 2px solid transparent; transition: border-color 0.3s;">Add
-                New</a></strong></h6>
-        </li>
-        <li class="nav-item">
-          <h6><strong><a class="nav-link" href="{% url 'index' %}"
-                style="color: white; padding: 10px; border-bottom: 2px solid transparent; transition: border-color 0.3s;">Records</a></strong>
-          </h6>
-        </li>
-        {% if request.user.is_staff or user.is_superuser %}
-        <li class="nav-item">
-          <h6><strong><a class="nav-link" href="{% url 'admin:index' %}"
-                style="color: white; padding: 10px; border-bottom: 2px solid transparent; transition: border-color 0.3s;">
-                <i class="fas fa-user-shield"></i>Admin Site</a></strong></h6>
-        </li>
+    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav">
+        <a class="nav-link active" href="{% url 'create' %}"><i class="bi bi-person-plus"
+            style="margin-right: 20px;"></i> Add New</a>
+        <a class="nav-link" href="{% url 'index' %}"><i class="bi bi-layout-text-window-reverse"
+            style="margin-right: 20px;"></i> Records</a>
+        {% if request.user.is_staff or request.user.is_superuser %}
+        <a class="nav-link" href="{% url 'admin:index' %}"><i class="bi bi-gear-fill"></i> Admin Site</a>
         {% endif %}
-      </ul>
-      {% if user.is_authenticated %}
-
-      <a href="{% url 'logout_user' %}">
-        <button class="Btn">
-          <div class="sign">
-            <svg viewBox="0 0 512 512">
-              <path
-                d="M377.9 105.9L500.7 228.7c7.2 7.2 11.3 17.1 11.3 27.3s-4.1 20.1-11.3 27.3L377.9 406.1c-6.4 6.4-15 9.9-24 9.9c-18.7 0-33.9-15.2-33.9-33.9l0-62.1-128 0c-17.7 0-32-14.3-32-32l0-64c0-17.7 14.3-32 32-32l128 0 0-62.1c0-18.7 15.2-33.9 33.9-33.9c9 0 17.6 3.6 24 9.9zM160 96L96 96c-17.7 0-32 14.3-32 32l0 256c0 17.7 14.3 32 32 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32l-64 0c-53 0-96-43-96-96L0 128C0 75 43 32 96 32l64 0c17.7 0 32 14.3 32 32s-14.3 32-32 32z">
-              </path>
-            </svg>
-          </div>
-          <div class="text">Logout</div>
-        </button>
+      </div>
+      {% if request.user.is_authenticated %}
+      <span class="navbar-text ml-auto">
+        Welcome Back, <strong>{{ request.user.username }}</strong>
+      </span>
+      <a href="{% url 'logout_user' %}" class="btn btn-outline-warning ml-2">
+        <i class="bi bi-box-arrow-right"></i> Logout
       </a>
-
-
-      <h5 id="userlog"><strong style="text-transform: capitalize;"> <span>Welcome Back, </span>{{request.user.username}}
-        </strong></h5>
       {% else %}
-
-      <h6><strong><a class="nav-link" href="{% url 'login_user' %}" class="btn1" id="btn">Login</a></strong></h6>
-
-      <h6><strong><a class="nav-link" href="{% url 'register' %}" id="btn">Register</a></strong></h6>
+      <a class="nav-link" href="{% url 'login_user' %}"><i class="bi bi-box-arrow-in-right"></i> Login</a>
+      <a class="nav-link" href="{% url 'register' %}"><i class="bi bi-person-plus-fill"></i> Register</a>
       {% endif %}
-
     </div>
   </nav>
 

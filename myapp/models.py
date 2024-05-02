@@ -19,7 +19,8 @@ class Customer(models.Model):
     ]
     vip_status = models.CharField(max_length=50, choices=VIP_STATES_CHOICES)
     created_by = models.ForeignKey(UserInfo, on_delete=models.CASCADE)
-    profile_image = models.ImageField(upload_to='profile_images/')
+    profile_image = models.ImageField(upload_to='profile_images/', default='default_profile_image.jpg')
+
 
 
     def __str__(self):
@@ -33,6 +34,9 @@ class logHistory(models.Model):
     previous_value = models.CharField(max_length=255, blank=False, null=False)
     new_value = models.CharField(max_length=255, blank=False, null=False)
     created_time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self) -> str:
+        return self.name
 
 
 # store authentication information in hashed_password and hashed_username fields

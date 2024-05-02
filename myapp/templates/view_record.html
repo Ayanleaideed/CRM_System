@@ -6,19 +6,8 @@
 <title>View Record</title>
 <style>
     body {
-            {
-            % comment %
-        }
-
         background-color: #f8f9fa;
-
-            {
-            % endcomment %
-        }
-
-        background-image: linear-gradient(135deg, transparent 0%, transparent 9%, rgba(221, 113, 32, 0.6) 9%, rgba(221, 113, 32, 0.6) 22%, transparent 22%, transparent 48%, rgba(239, 148, 10, 0.6) 48%, rgba(239, 148, 10, 0.6) 100%),
-        linear-gradient(45deg, transparent 0%, transparent 29%, rgb(221, 113, 32) 29%, rgb(221, 113, 32) 48%, rgb(202, 77, 53) 48%, rgb(202, 77, 53) 84%, transparent 84%, transparent 100%),
-        linear-gradient(90deg, rgb(255, 255, 255), rgb(255, 255, 255));
+        background-image: url('your-background-image-url');
     }
 
     #form_div {
@@ -27,52 +16,61 @@
         padding: 20px 15px;
         background-color: #f3ebeb;
         border-radius: 10px;
-        box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
+        box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.2);
     }
 
     form {
         max-width: 700px;
-        width: 400px;
-        margin: 2rem auto;
-        padding: 30px 15px;
+        margin: 0 auto;
+        padding: 20px 15px;
         background-color: #ffffff;
-        border-radius: 20px;
-        /* border: solid 6px lightskyblue; */
-        box-shadow: 0px 0px 20px 0px rgba(0, 0, 0, 0.5);
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     }
 
     .card-header {
-        text-transform: capitalize;
+        text-transform: uppercase;
         background-color: #007bff;
-        color: white;
+        color: #fff;
+        padding: 10px;
+        font-size: 20px;
+        text-align: center;
     }
 
     .input-group-text {
         background-color: #495057;
-        color: white;
+        color: #fff;
+        border: none;
+        font-weight: bold;
+        display: inline-block;
+        width: auto;
     }
 
     .btn-primary {
         background-color: #007bff;
         border-color: #007bff;
-        margin: 20px 0;
     }
 
-    .input-group-text {
-        background-color: rgb(202, 202, 202);
-        color: black;
-        width: 7rem;
-        display: flex;
-        align-items: center;
-        /* Align text vertically centered */
+    img {
+        height: 50px;
+        width: 50px;
+        border-radius: 50%;
+        object-fit: cover;
+        border: 2px solid #007bff;
+    }
+
+    .form-control {
+        background-color: #e9ecef;
+        border: 1px solid #ced4da;
+        color: #495057;
     }
 </style>
-<div id="form_div" class="card mx-auto">
-    <div class="card-header text-center">
+<div id="form_div" class="card">
+    <div class="card-header">
         <strong>User Records: {{User_Record.username}}</strong>
     </div>
     <form method="post">
-        <a href="{% url 'index' %}" class="btn btn-primary mt-2 pl-3 pr-3">Back</a>
+        <a href="{% url 'index' %}" style="margin-bottom: 20px;" class="btn btn-primary mt-2 pl-3 pr-3">Back</a>
         {% csrf_token %}
         <ul class="list-group list-group-flush">
             {% for key, value in User_Record.items %}
@@ -80,17 +78,21 @@
                 <div class="input-group input-group-sm">
                     <div class="input-group-prepend">
                         {% if key == 'profileImage' %}
-                        <span class="input-group-text" id="inputGroup-sizing-sm"><strong><img
-                                    style="border-radius: 30%;  border-color: hsla(60, 11%, 11%, 0.522); border: 2px solid; scale: 130%; object-fit: cover; "
-                                    src="{{ value.url }}" class="img-fluid img-thumbnail"
-                                    alt="{{value}}"></strong></span>
-
+                        {% if not value.url %}
+                        <!-- Display the icon when the profile image URL is empty -->
+                        <i class="bi bi-file-person-fill"></i>
                         {% else %}
-                        <span class="input-group-text" id="inputGroup-sizing-sm"><strong>{{key}}</strong></span>
+                        <!-- Display the profile image -->
+                        <span class="input-group-text">
+                            <img src="{{ value.url }}" alt="{{ User_Record.username }}'s profile image">
+                        </span>
+                        {% endif %}
+                        {% else %}
+                        <!-- Display other key-value pairs -->
+                        <span class="input-group-text">{{ key }}</span>
                         {% endif %}
                     </div>
-                    <input name="{{key}}" type="text" class="form-control" aria-label="Small"
-                        aria-describedby="inputGroup-sizing-sm" disabled value="{{value}}">
+                    <input name="{{key}}" type="text" class="form-control" disabled value="{{value}}">
                 </div>
             </div>
             {% endfor %}
