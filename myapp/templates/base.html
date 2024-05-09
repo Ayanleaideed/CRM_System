@@ -38,6 +38,17 @@
       border-bottom: 2px solid #fff;
       /* White underline on hover */
     }
+
+   .navbar-right {
+  margin-left: auto; /* Pushes the content to the right */
+  display: flex;
+  align-items: center;
+}
+
+.auth-login, .auth-register {
+  margin-left: 10px; /* Optional: adds space between login and register buttons */
+}
+    
   </style>
 </head>
 
@@ -62,19 +73,27 @@
         <a class="nav-link" href="{% url 'admin:index' %}"><i class="bi bi-gear-fill"></i> Admin Site</a>
         {% endif %}
       </div>
-      {% if request.user.is_authenticated %}
-      <span class="navbar-text ml-auto">
-        Welcome Back, <strong>{{ request.user.username }}</strong>
-      </span>
-      <a href="{% url 'logout_user' %}" class="btn btn-outline-warning ml-2">
-        <i class="bi bi-box-arrow-right"></i> Logout
-      </a>
-      {% else %}
-      <a class="nav-link" href="{% url 'login_user' %}"><i class="bi bi-box-arrow-in-right"></i> Login</a>
-      <a class="nav-link" href="{% url 'register' %}"><i class="bi bi-person-plus-fill"></i> Register</a>
-      {% endif %}
+      <div class="navbar-right ml-auto d-flex align-items-center">
+        {% if request.user.is_authenticated %}
+        <span class="navbar-text">
+          Welcome Back, <strong>{{ request.user.username }}</strong>
+        </span>
+        <a href="{% url 'logout_user' %}" class="btn btn-outline-warning ml-2">
+          <i class="bi bi-box-arrow-right"></i> Logout
+        </a>
+        {% else %}
+        <a class="nav-link auth-login" href="{% url 'login_user' %}">
+          <i class="bi bi-box-arrow-in-right"></i> Login
+        </a>
+        <a class="nav-link auth-register" href="{% url 'register' %}">
+          <i class="bi bi-person-plus-fill"></i> Register
+        </a>
+        {% endif %}
+      </div>
     </div>
   </nav>
+
+
 
   {% if messages %}
   {% for message in messages %}
