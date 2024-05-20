@@ -114,19 +114,23 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+# settings.py
+
+# Add these settings if not already present
 STATIC_URL = '/static/'
 
+# Ensure that your STATIC_ROOT is defined for production
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Media files
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
-
-
+# Additional locations the staticfiles app will traverse
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, 'static'),
 ]
-# Default primary key field type
-# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
+
+# For serving static files during production (only for development purposes)
+if not DEBUG:
+    from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
+    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
