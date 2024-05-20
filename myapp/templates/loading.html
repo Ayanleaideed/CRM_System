@@ -99,7 +99,13 @@
 <body>
 
         <div class="hero-section">
-            <h1 id="animated-hero">Welcome, {{ user.username }}.</h1>
+             {% if request.user.is_authenticated %}
+              
+             <h1 id="animated-hero">Welcome, {{ user.username }}.</h1>
+             {% else %}
+             <h1 id="animated-hero">Welcome, {{ Guest }}.</h1>
+             {% endif %}
+
         </div>
     
 
