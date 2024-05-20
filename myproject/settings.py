@@ -25,11 +25,21 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = True
 
 
+# ALLOWED_HOSTS = [
+#     '.vercel.app',
+#     '127.0.0.1',
+#     'localhost'
+# ]
+
+
 ALLOWED_HOSTS = [
+    'crm-system-sigma.vercel.app',
+    'crm-system-h7ka9aijf-ayanles-projects-abda602c.vercel.app',
     '.vercel.app',
     '127.0.0.1',
     'localhost'
 ]
+
 
 # Application definition
 
@@ -124,10 +134,10 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_DIR = os.path.join(BASE_DIR, 'static')
 os.makedirs(STATIC_DIR, exist_ok=True)
 
-# For serving static files during production (only for development purposes)
-if not DEBUG:
-    from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
-    STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+# # For serving static files during production (only for development purposes)
+# if not DEBUG:
+#     from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
+#     STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
 
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
