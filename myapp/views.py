@@ -287,7 +287,7 @@ def update(request, id):
                 customer.phone_number = request.POST.get('phone_Number')
                 customer.orders = request.POST.get('orders')
                 customer.vip_status = request.POST.get('vip_status')
-                customer.profile_image = request.POST.get('profile_image')
+                customer.profile_image = 'profile_images/profile.jpg' ##request.POST.get('profile_image')
 
 
                  # Prepare log details

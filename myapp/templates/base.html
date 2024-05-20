@@ -66,9 +66,9 @@
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
       <div class="navbar-nav">
         <a class="nav-link active" href="{% url 'create' %}"><i class="bi bi-person-plus"
-            style="margin-right: 20px;"></i> Add New</a>
+            style="margin-right: 3px;"></i>Add New Record</a>
         <a class="nav-link" href="{% url 'index' %}"><i class="bi bi-layout-text-window-reverse"
-            style="margin-right: 20px;"></i> Records</a>
+            style="margin-right: 2px;"></i> Records</a>
         {% if request.user.is_staff or request.user.is_superuser %}
         <a class="nav-link" href="{% url 'admin:index' %}"><i class="bi bi-gear-fill"></i> Admin Site</a>
         {% endif %}
