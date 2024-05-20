@@ -116,16 +116,13 @@ USE_TZ = True
 
 # settings.py
 
-# Add these settings if not already present
-STATIC_URL = '/static/'
 
-# Ensure that your STATIC_ROOT is defined for production
+STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
-# Additional locations the staticfiles app will traverse
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'static'),
-]
+# Ensure the 'static' directory exists or create it
+STATIC_DIR = os.path.join(BASE_DIR, 'static')
+os.makedirs(STATIC_DIR, exist_ok=True)
 
 # For serving static files during production (only for development purposes)
 if not DEBUG:
