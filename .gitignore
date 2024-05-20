@@ -44,3 +44,8 @@ myvenv/
 # Ignore temporary files
 *.swp
 *.swo
+
+
+# .gitignore
+/staticfiles/
+!staticfiles/.keep  # If you use a .keep file to include an empty dir

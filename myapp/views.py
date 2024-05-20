@@ -424,5 +424,5 @@ def adminAuth(request, username, password):
 
 
 
-# if __name__=="__main__":
-#     debug=True
+if __name__=="__main__":
+    debug=True
