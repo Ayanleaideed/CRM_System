@@ -1,10 +1,6 @@
 import os
 from pathlib import Path
-from datetime import datetime, timedelta
-from pathlib import Path
 import environ
-from pathlib import Path
-
 
 
 
@@ -12,8 +8,10 @@ from pathlib import Path
 env = environ.Env()
 environ.Env.read_env()  # reads the .env file
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -24,21 +22,7 @@ SECRET_KEY = env('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-
-# ALLOWED_HOSTS = [
-#     '.vercel.app',
-#     '127.0.0.1',
-#     'localhost'
-# ]
-
-
-ALLOWED_HOSTS = [
-    'crm-system-sigma.vercel.app',
-    'crm-system-h7ka9aijf-ayanles-projects-abda602c.vercel.app',
-    '.vercel.app',
-    '127.0.0.1',
-    'localhost'
-]
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -83,14 +67,33 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
+
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',
+#         'NAME': 'CRM_Database',
+#         'USER': 'postgres',
+#         'PASSWORD': 'root',
+#         'HOST': 'localhost',
+#         'PORT': '5432',
+#     }
+# }
+
+SESSION_COOKIE_AGE = 1800
 
 DATABASES = {
     'default': env.db('POSTGRES_URL')
 }
-
-SESSION_COOKIE_AGE = 1800
 
 # Password validation
 # https://docs.djangoproject.com/en/5.0/ref/settings/#auth-password-validators
@@ -110,6 +113,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
 
@@ -121,23 +125,27 @@ USE_I18N = True
 
 USE_TZ = True
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-# settings.py
-
-
-STATIC_URL = '/static/'
+STATIC_URL = 'static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# Ensure the 'static' directory exists or create it
-STATIC_DIR = os.path.join(BASE_DIR, 'static')
-os.makedirs(STATIC_DIR, exist_ok=True)
-
-# # For serving static files during production (only for development purposes)
-# if not DEBUG:
-#     from django.contrib.staticfiles.storage import ManifestStaticFilesStorage
-#     STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-
+# Default primary key field type
+# https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+
+
+
+# settings.py
+
+import os
+
+# Define MEDIA_ROOT
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Define MEDIA_URL
+MEDIA_URL = '/media/'
