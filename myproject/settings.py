@@ -1,21 +1,22 @@
+# sports_stats_app/settings.py
+
 import os
 from pathlib import Path
+from datetime import datetime, timedelta
+from pathlib import Path
 import environ
+
+
+
 
 # Initialize environment variables
 env = environ.Env()
 environ.Env.read_env()  # reads the .env file
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+SECRET_KEY = 'django-insecure-z_zde1*fk)*_k$-cpoi)r-cb%23)y%=0j@n8h2tbou0be6^52#'
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
 ALLOWED_HOSTS = [
@@ -26,8 +27,6 @@ ALLOWED_HOSTS = [
     'localhost'
 ]
 
-# Application definition
-
 INSTALLED_APPS = [
     'myapp',
     'django.contrib.admin',
@@ -37,7 +36,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
-
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -68,12 +66,24 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'myproject.wsgi.application'
 
-# Database
+# Database configuration
 DATABASES = {
-    'default': env.db('POSTGRES_URL')
+    'default': env.db('POSTGRES_URL'),
 }
 
-# Password validation
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
+now = datetime.now()
+midnight = datetime.combine(now.date() + timedelta(days=1), datetime.min.time())
+seconds_until_midnight = (midnight - now).seconds
+SESSION_COOKIE_AGE = seconds_until_midnight
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
+
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -81,21 +91,12 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
 USE_TZ = True
 
-# Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-# Media files
-MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
