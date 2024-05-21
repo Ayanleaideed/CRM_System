@@ -1,6 +1,7 @@
 import os
 from pathlib import Path
 import environ
+import logging
 
 # Initialize environment variables
 env = environ.Env()
@@ -13,18 +14,21 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.get('SECRET_KEY', 'django-insecure-fallback-secret-key')
+SECRET_KEY = env.get('SECRET_KEY')
+if not SECRET_KEY:
+    logging.error('SECRET_KEY is not set in the environment variables.')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=True)
 
-ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[
+ALLOWED_HOSTS = [
     'crm-system-sigma.vercel.app',
     'crm-system-h7ka9aijf-ayanles-projects-abda602c.vercel.app',
     '.vercel.app',
     '127.0.0.1',
     'localhost'
-])
+]
+
 
 # Application definition
 
