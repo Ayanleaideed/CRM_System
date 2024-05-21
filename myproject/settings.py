@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
 import environ
-import logging
 
 # Initialize environment variables
 env = environ.Env()
@@ -14,12 +13,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env.get('SECRET_KEY')
-if not SECRET_KEY:
-    logging.error('SECRET_KEY is not set in the environment variables.')
+SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env.bool('DEBUG', default=True)
+DEBUG = True
 
 ALLOWED_HOSTS = [
     'crm-system-sigma.vercel.app',
@@ -28,7 +25,6 @@ ALLOWED_HOSTS = [
     '127.0.0.1',
     'localhost'
 ]
-
 
 # Application definition
 
@@ -74,7 +70,7 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': env.db('DATABASE_URL')
+    'default': env.db('POSTGRES_URL')
 }
 
 # Password validation
@@ -93,13 +89,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles'
-STATICFILES_DIRS = [BASE_DIR / 'static']
-
-STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
+
+# Media files
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-
