@@ -22,7 +22,7 @@
     {
       "src": "/(.*)",
       "dest": "myproject/wsgi.py",
-      "continue": "${STATIC_FILE_EXISTS}"
+      "continue": true
     }
   ]
 }
