@@ -4,19 +4,14 @@ import environ
 
 # Initialize environment variables
 env = environ.Env()
-environ.Env.read_env()  # reads the .env file
-
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
+# Define BASE_DIR first
 BASE_DIR = Path(__file__).resolve().parent.parent
+# Now read the .env file using the BASE_DIR
+environ.Env.read_env(os.path.join(BASE_DIR, '.env'))  # Ensure this points to your .env file
 
 # Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = env('SECRET_KEY')
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+SECRET_KEY = "django-insecure-yhxw(xhv04%&tcw1wthbp^*2g#3cq_4)c-($onr6^_vlpl=3rf"
+DEBUG = env.bool('DEBUG', default=True)
 
 ALLOWED_HOSTS = [
     'crm-system-sigma.vercel.app',
@@ -27,7 +22,6 @@ ALLOWED_HOSTS = [
 ]
 
 # Application definition
-
 INSTALLED_APPS = [
     'myapp',
     'django.contrib.admin',
@@ -74,7 +68,6 @@ DATABASES = {
     'default': env.db('POSTGRES_URL')
 }
 
-# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -82,7 +75,6 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -94,13 +86,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
-WHITENOISE_AUTOREFRESH = {
-    'admin': True,
-}
-
 # Media files
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
