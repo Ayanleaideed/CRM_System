@@ -4,24 +4,30 @@ import environ
 
 # Initialize environment variables
 env = environ.Env()
-# Define BASE_DIR first
+environ.Env.read_env()  # reads the .env file
+
+# Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-# Now read the .env file using the BASE_DIR
-environ.Env.read_env(os.path.join(BASE_DIR, '.env'))  # Ensure this points to your .env file
 
 # Quick-start development settings - unsuitable for production
-SECRET_KEY = "django-insecure-yhxw(xhv04%&tcw1wthbp^*2g#3cq_4)c-($onr6^_vlpl=3rf"
+# See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
+
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = env('SECRET_KEY')
+
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG', default=True)
 
-ALLOWED_HOSTS = [
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=[
     'crm-system-sigma.vercel.app',
     'crm-system-h7ka9aijf-ayanles-projects-abda602c.vercel.app',
     '.vercel.app',
     '127.0.0.1',
     'localhost'
-]
+])
 
 # Application definition
+
 INSTALLED_APPS = [
     'myapp',
     'django.contrib.admin',
@@ -34,7 +40,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    'whitenoise.middleware.WhiteNoiseMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',  # Add WhiteNoise middleware here
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -65,9 +71,10 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 
 # Database
 DATABASES = {
-    'default': env.db('POSTGRES_URL')
+    'default': env.db('DATABASE_URL')
 }
 
+# Password validation
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -75,6 +82,9 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
+
+DEBUG=True
+# Internationalization
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
@@ -82,12 +92,13 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 STATIC_URL = '/static/'
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+STATICFILES_DIRS = [BASE_DIR / 'static']
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Media files
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
+# Default primary key field type
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
